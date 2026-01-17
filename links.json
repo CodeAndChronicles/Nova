@@ -1,0 +1,9 @@
+[
+  {
+    "name": "NovaPass",
+    "path": "https://codeandchronicles.github.io/NovaPass/index.html",
+    "icon": "mdi:password",
+    "catalog": "server",
+    "badge": "Manage"
+  }
+]

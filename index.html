@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova | Personal Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        :root {
+            /* Modern Color Palette */
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --primary-gradient: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            --primary-10: rgba(16, 185, 129, 0.1);
+            --primary-20: rgba(16, 185, 129, 0.2);
+            
+            /* Light Theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            --transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark-mode {
+            /* Dark Theme */
+            --primary-gradient: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #475569;
+            --card-bg: #1e293b;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== THEME SWITCH ===== */
+        .theme-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .theme-switch:hover {
+            border-color: var(--primary);
+        }
+
+        .theme-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode .theme-switch::after {
+            transform: translateX(24px);
+            background: var(--primary-light);
+        }
+
+        /* ===== TABS ===== */
+        .tabs-container {
+            margin: 30px auto;
+            max-width: 400px;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 8px;
+            position: relative;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px 24px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            z-index: 1;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--text-primary);
+        }
+
+        .tab-indicator {
+            position: absolute;
+            top: 8px;
+            height: calc(100% - 16px);
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            text-align: center;
+            padding: 50px 0 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* ===== SEARCH ===== */
+        .search-container {
+            max-width: 500px;
+            margin: 40px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 24px 16px 52px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-20);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            pointer-events: none;
+        }
+
+        /* ===== CATEGORIES ===== */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+
+        .category-header {
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .category-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            background: var(--primary-10);
+            color: var(--primary);
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .category-card.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ===== LINKS ===== */
+        .links-container {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .category-card.active .links-container {
+            padding: 24px;
+            max-height: 2000px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .link-item:hover {
+            border-color: var(--primary);
+            transform: translateX(8px);
+            background: var(--card-bg);
+        }
+
+        .link-item:hover::before {
+            opacity: 1;
+        }
+
+        .link-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-10);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .link-item:hover .link-icon {
+            background: var(--primary-gradient);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .link-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-name {
+            font-weight: 600;
+            margin-bottom: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-url {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'SF Mono', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-badge {
+            background: var(--primary-10);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* ===== DEBUG TAB ===== */
+        .debug-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .debug-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .debug-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .debug-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-family: 'SF Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .data-display {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 16px;
+            overflow-x: auto;
+        }
+
+        .data-display pre {
+            margin: 0;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* ===== EMPTY STATES ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--text-tertiary);
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        /* ===== LOADING ===== */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .tabs-container {
+                max-width: 100%;
+            }
+            
+            .tab-btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .category-header {
+                padding: 20px;
+            }
+            
+            .category-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
+            }
+            
+            .search-input {
+                padding: 14px 20px 14px 48px;
+            }
+            
+            .debug-section {
+                padding: 20px;
+            }
+        }
+
+        /* ===== UTILITIES ===== */
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card-hover {
+            transition: var(--transition);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <iconify-icon icon="mdi:star-four-points"></iconify-icon>
+                </div>
+                <div class="logo-text">
+                    <h1>Nova</h1>
+                    <p>Personal Dashboard</p>
+                </div>
+            </a>
+            
+            <div class="theme-switch" id="themeSwitch" title="Toggle Theme"></div>
+        </div>
+    </nav>
+
+    <!-- Tabs -->
+    <div class="container tabs-container">
+        <div class="tabs">
+            <div class="tab-indicator" id="tabIndicator"></div>
+            <button class="tab-btn active" data-tab="dashboard">
+                <iconify-icon icon="mdi:view-dashboard"></iconify-icon>
+                Dashboard
+            </button>
+            <button class="tab-btn" data-tab="debug">
+                <iconify-icon icon="mdi:bug"></iconify-icon>
+                Debug
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Dashboard Tab -->
+        <div id="dashboardTab" class="tab-content active">
+            <section class="hero">
+                <h2>Your Digital Workspace</h2>
+                <p>All your essential links and tools organized in one beautiful dashboard</p>
+            </section>
+
+            <div class="search-container">
+                <div class="search-icon">
+                    <iconify-icon icon="mdi:magnify"></iconify-icon>
+                </div>
+                <input type="text" 
+                       class="search-input" 
+                       id="searchInput" 
+                       placeholder="Search links and categories..."
+                       autocomplete="off">
+            </div>
+
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+
+        <!-- Debug Tab -->
+        <div id="debugTab" class="tab-content">
+            <div class="debug-content">
+                <div class="debug-section">
+                    <div class="debug-title">
+                        <iconify-icon icon="mdi:information"></iconify-icon>
+                        System Information
+                    </div>
+                    <div class="debug-grid" id="systemInfo">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="debug-section">
+                    <div class="debug-title">
+                        <iconify-icon icon="mdi:database"></iconify-icon>
+                        Data Status
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Categories Loaded:</span>
+                        <span class="info-value" id="categoriesCount">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Links Loaded:</span>
+                        <span class="info-value" id="linksCount">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Theme:</span>
+                        <span class="info-value" id="currentTheme">Light</span>
+                    </div>
+                </div>
+
+                <div class="debug-section">
+                    <div class="debug-title">
+                        <iconify-icon icon="mdi:code-json"></iconify-icon>
+                        JSON Structure
+                    </div>
+                    <div class="data-display">
+                        <pre id="jsonStructure">
+Data structure will appear here...
+Make sure list.json and links.json are in the same directory
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading your dashboard...</p>
+        </div>
+    </main>
+
+    <script>
+        // === APP STATE ===
+        const appState = {
+            categories: [],
+            links: [],
+            currentTab: 'dashboard',
+            searchQuery: '',
+            expandedCategories: new Set(),
+            isLoading: true
+        };
+
+        // === DOM ELEMENTS ===
+        const elements = {
+            body: document.body,
+            themeSwitch: document.getElementById('themeSwitch'),
+            tabIndicator: document.getElementById('tabIndicator'),
+            categoriesGrid: document.getElementById('categoriesGrid'),
+            loading: document.getElementById('loading'),
+            searchInput: document.getElementById('searchInput'),
+            systemInfo: document.getElementById('systemInfo'),
+            jsonStructure: document.getElementById('jsonStructure'),
+            currentTheme: document.getElementById('currentTheme'),
+            categoriesCount: document.getElementById('categoriesCount'),
+            linksCount: document.getElementById('linksCount')
+        };
+
+        // === TAB MANAGEMENT ===
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Update tab indicator position
+            function updateTabIndicator() {
+                const activeTab = document.querySelector('.tab-btn.active');
+                if (activeTab) {
+                    const tabWidth = activeTab.offsetWidth;
+                    const tabLeft = activeTab.offsetLeft;
+                    elements.tabIndicator.style.width = `${tabWidth}px`;
+                    elements.tabIndicator.style.transform = `translateX(${tabLeft}px)`;
+                }
+            }
+            
+            // Switch tabs
+            function switchTab(tabId) {
+                // Update buttons
+                tabButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tabId);
+                });
+                
+                // Update content
+                tabContents.forEach(content => {
+                    content.classList.toggle('active', content.id === `${tabId}Tab`);
+                });
+                
+                appState.currentTab = tabId;
+                updateTabIndicator();
+                
+                // Load data if switching to dashboard
+                if (tabId === 'dashboard' && appState.categories.length === 0) {
+                    loadData();
+                }
+            }
+            
+            // Add click events
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tab);
+                });
+            });
+            
+            // Initial update
+            updateTabIndicator();
+            
+            // Update on window resize
+            window.addEventListener('resize', updateTabIndicator);
+        }
+
+        // === THEME MANAGEMENT ===
+        function setupTheme() {
+            // Load saved theme or default to light
+            const savedTheme = localStorage.getItem('nova-theme') || 'light';
+            
+            // Apply theme
+            if (savedTheme === 'dark') {
+                elements.body.classList.add('dark-mode');
+            }
+            
+            // Update display
+            updateThemeDisplay();
+            
+            // Add click event
+            elements.themeSwitch.addEventListener('click', toggleTheme);
+        }
+
+        function toggleTheme() {
+            const isDark = elements.body.classList.contains('dark-mode');
+            
+            if (isDark) {
+                elements.body.classList.remove('dark-mode');
+                localStorage.setItem('nova-theme', 'light');
+            } else {
+                elements.body.classList.add('dark-mode');
+                localStorage.setItem('nova-theme', 'dark');
+            }
+            
+            updateThemeDisplay();
+        }
+
+        function updateThemeDisplay() {
+            const isDark = elements.body.classList.contains('dark-mode');
+            elements.currentTheme.textContent = isDark ? 'Dark' : 'Light';
+        }
+
+        // === DATA LOADING ===
+        async function loadData() {
+            try {
+                showLoading();
+                
+                // Load categories
+                const categoriesResponse = await fetch('list.json');
+                if (!categoriesResponse.ok) throw new Error('Failed to load categories');
+                appState.categories = await categoriesResponse.json();
+                
+                // Load links
+                const linksResponse = await fetch('links.json');
+                if (!linksResponse.ok) throw new Error('Failed to load links');
+                appState.links = await linksResponse.json();
+                
+                // Validate data structure
+                validateData();
+                
+                // Update UI
+                renderCategories();
+                updateDebugInfo();
+                hideLoading();
+                
+            } catch (error) {
+                console.error('Data loading error:', error);
+                showError('Failed to load data. Please check console for details.');
+            }
+        }
+
+        function validateData() {
+            // Check if data has the expected structure
+            const isValid = Array.isArray(appState.categories) && Array.isArray(appState.links);
+            
+            if (!isValid) {
+                throw new Error('Invalid data structure in JSON files');
+            }
+            
+            // Update counters
+            elements.categoriesCount.textContent = appState.categories.length;
+            elements.linksCount.textContent = appState.links.length;
+        }
+
+        // === RENDER CATEGORIES ===
+        function renderCategories() {
+            elements.categoriesGrid.innerHTML = '';
+            
+            // Filter categories based on search
+            const filteredCategories = appState.searchQuery ? 
+                appState.categories.filter(cat => 
+                    cat.name.toLowerCase().includes(appState.searchQuery.toLowerCase()) ||
+                    cat.description?.toLowerCase().includes(appState.searchQuery.toLowerCase()) ||
+                    appState.links.some(link => 
+                        link.catalog === cat.id && 
+                        link.name.toLowerCase().includes(appState.searchQuery.toLowerCase())
+                    )
+                ) : appState.categories;
+            
+            if (filteredCategories.length === 0) {
+                showEmptyState('No categories found matching your search');
+                return;
+            }
+            
+            // Create category cards
+            filteredCategories.forEach(category => {
+                const categoryLinks = appState.links.filter(link => link.catalog === category.id);
+                const filteredLinks = appState.searchQuery ? 
+                    categoryLinks.filter(link => 
+                        link.name.toLowerCase().includes(appState.searchQuery.toLowerCase()) ||
+                        link.path.toLowerCase().includes(appState.searchQuery.toLowerCase())
+                    ) : categoryLinks;
+                
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card fade-in';
+                categoryCard.dataset.categoryId = category.id;
+                
+                categoryCard.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-info">
+                            <div class="category-icon">
+                                <iconify-icon icon="${category.icon || 'mdi:folder'}"></iconify-icon>
+                            </div>
+                            <div>
+                                <div class="category-name">${category.name}</div>
+                                ${category.description ? `
+                                    <div class="category-desc">${category.description}</div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle ${category.name}">
+                            <iconify-icon class="toggle-icon" icon="mdi:chevron-down"></iconify-icon>
+                        </button>
+                    </div>
+                    <div class="links-container">
+                        ${filteredLinks.length > 0 ? `
+                            <div class="links-grid">
+                                ${filteredLinks.map(link => `
+                                    <a href="${link.path}" 
+                                       class="link-item" 
+                                       target="_blank" 
+                                       rel="noopener noreferrer"
+                                       title="Visit ${link.name}">
+                                        <div class="link-icon">
+                                            <iconify-icon icon="${link.icon || 'mdi:link'}"></iconify-icon>
+                                        </div>
+                                        <div class="link-content">
+                                            <div class="link-name">
+                                                ${link.name}
+                                                ${link.badge ? `<span class="link-badge">${link.badge}</span>` : ''}
+                                            </div>
+                                            <div class="link-url">${link.path}</div>
+                                        </div>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div class="empty-state" style="padding: 20px;">
+                                <iconify-icon class="empty-icon" icon="mdi:link-off"></iconify-icon>
+                                <p>No links in this category</p>
+                            </div>
+                        `}
+                    </div>
+                `;
+                
+                elements.categoriesGrid.appendChild(categoryCard);
+                
+                // Add expand/collapse functionality
+                const header = categoryCard.querySelector('.category-header');
+                const toggleBtn = categoryCard.querySelector('.toggle-btn');
+                
+                const toggleCategory = () => {
+                    const isExpanded = categoryCard.classList.contains('active');
+                    
+                    if (isExpanded) {
+                        categoryCard.classList.remove('active');
+                        appState.expandedCategories.delete(category.id);
+                    } else {
+                        categoryCard.classList.add('active');
+                        appState.expandedCategories.add(category.id);
+                    }
+                };
+                
+                header.addEventListener('click', (e) => {
+                    if (!toggleBtn.contains(e.target)) {
+                        toggleCategory();
+                    }
+                });
+                
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleCategory();
+                });
+                
+                // Auto-expand first category
+                if (filteredCategories[0] === category && !appState.searchQuery) {
+                    setTimeout(() => {
+                        categoryCard.classList.add('active');
+                        appState.expandedCategories.add(category.id);
+                    }, 300);
+                }
+            });
+        }
+
+        // === DEBUG INFO ===
+        function updateDebugInfo() {
+            // System information
+            elements.systemInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Browser:</span>
+                    <span class="info-value">${getBrowserInfo()}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Screen:</span>
+                    <span class="info-value">${window.screen.width} × ${window.screen.height}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Local Storage:</span>
+                    <span class="info-value">${localStorage.getItem('nova-theme') || 'Not set'}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Performance:</span>
+                    <span class="info-value">${Math.round(performance.now())}ms</span>
+                </div>
+            `;
+            
+            // JSON structure (sample only - not actual data)
+            elements.jsonStructure.textContent = JSON.stringify({
+                note: "JSON structure is loaded from external files",
+                list_json: "Contains categories with id, name, icon, description",
+                links_json: "Contains links with name, path, icon, catalog, badge"
+            }, null, 2);
+        }
+
+        function getBrowserInfo() {
+            const ua = navigator.userAgent;
+            if (ua.includes('Chrome')) return 'Chrome';
+            if (ua.includes('Firefox')) return 'Firefox';
+            if (ua.includes('Safari')) return 'Safari';
+            if (ua.includes('Edge')) return 'Edge';
+            return 'Unknown';
+        }
+
+        // === SEARCH FUNCTIONALITY ===
+        function setupSearch() {
+            let searchTimeout;
+            
+            elements.searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                
+                searchTimeout = setTimeout(() => {
+                    appState.searchQuery = e.target.value.trim();
+                    renderCategories();
+                }, 300);
+            });
+            
+            // Clear search with Escape key
+            elements.searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    elements.searchInput.value = '';
+                    appState.searchQuery = '';
+                    renderCategories();
+                }
+            });
+        }
+
+        // === UI STATES ===
+        function showLoading() {
+            elements.loading.style.display = 'block';
+            appState.isLoading = true;
+        }
+
+        function hideLoading() {
+            elements.loading.style.display = 'none';
+            appState.isLoading = false;
+        }
+
+        function showEmptyState(message) {
+            elements.categoriesGrid.innerHTML = `
+                <div class="empty-state">
+                    <iconify-icon class="empty-icon" icon="mdi:magnify-close"></iconify-icon>
+                    <div class="empty-title">${message}</div>
+                    <p>Try a different search term</p>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            elements.categoriesGrid.innerHTML = `
+                <div class="empty-state">
+                    <iconify-icon class="empty-icon" icon="mdi:alert-circle"></iconify-icon>
+                    <div class="empty-title">Oops! Something went wrong</div>
+                    <p>${message}</p>
+                    <button onclick="init()" style="
+                        margin-top: 20px;
+                        padding: 10px 24px;
+                        background: var(--primary);
+                        color: white;
+                        border: none;
+                        border-radius: var(--radius-md);
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: var(--transition);
+                    " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                        Try Again
+                    </button>
+                </div>
+            `;
+            hideLoading();
+        }
+
+        // === INITIALIZATION ===
+        function init() {
+            setupTabs();
+            setupTheme();
+            setupSearch();
+            loadData();
+            
+            // Smooth page appearance
+            setTimeout(() => {
+                elements.body.style.opacity = '0';
+                elements.body.style.transition = 'opacity 0.3s ease';
+                requestAnimationFrame(() => {
+                    elements.body.style.opacity = '1';
+                });
+            }, 100);
+        }
+
+        // Make functions available globally for error recovery
+        window.init = init;
+        window.loadData = loadData;
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
