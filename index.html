@@ -3,467 +3,822 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova | Personal Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Nexus | Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <style>
         :root {
-            /* Modern Color Palette */
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --primary-light: #34d399;
-            --primary-gradient: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-            --primary-10: rgba(16, 185, 129, 0.1);
-            --primary-20: rgba(16, 185, 129, 0.2);
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-10: rgba(99, 102, 241, 0.1);
+            --primary-20: rgba(99, 102, 241, 0.2);
+            --green: #22c55e;
+            --green-10: rgba(34, 197, 94, 0.1);
+            --green-20: rgba(34, 197, 94, 0.2);
+            --orange: #f97316;
+            --orange-10: rgba(249, 115, 22, 0.1);
+            --orange-20: rgba(249, 115, 22, 0.2);
+            --purple: #a855f7;
+            --purple-10: rgba(168, 85, 247, 0.1);
+            --purple-20: rgba(168, 85, 247, 0.2);
             
-            /* Light Theme */
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-tertiary: #f1f5f9;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
             --text-tertiary: #94a3b8;
             --border-color: #e2e8f0;
             --card-bg: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.2);
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
             --radius-full: 9999px;
-            --transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --sidebar-width: 64px;
+            --sidebar-expanded: 220px;
+            --topbar-height: 56px;
         }
 
         .dark-mode {
-            /* Dark Theme */
-            --primary-gradient: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
-            --text-tertiary: #94a3b8;
-            --border-color: #475569;
+            --text-tertiary: #64748b;
+            --border-color: #334155;
             --card-bg: #1e293b;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            --green-10: rgba(34, 197, 94, 0.15);
+            --green-20: rgba(34, 197, 94, 0.25);
+            --orange-10: rgba(249, 115, 22, 0.15);
+            --orange-20: rgba(249, 115, 22, 0.25);
+            --purple-10: rgba(168, 85, 247, 0.15);
+            --purple-20: rgba(168, 85, 247, 0.25);
+            --primary-10: rgba(99, 102, 241, 0.15);
+            --primary-20: rgba(99, 102, 241, 0.25);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg-primary);
+            background: var(--bg-secondary);
             color: var(--text-primary);
-            transition: var(--transition);
             min-height: 100vh;
+            display: flex;
+            opacity: 0;
+            animation: bodyFadeIn 0.4s ease forwards;
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        @keyframes bodyFadeIn { to { opacity: 1; } }
 
-        /* ===== NAVBAR ===== */
-        .navbar {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            height: 100vh;
+            position: fixed;
+            left: 0;
             top: 0;
-            z-index: 100;
-            padding: 16px 0;
-        }
-
-        .nav-content {
+            z-index: 200;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            padding: 16px 12px;
+            gap: 6px;
         }
 
-        .logo {
+        .sidebar.expanded {
+            width: var(--sidebar-expanded);
+        }
+
+        .sidebar-logo {
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 4px 6px 20px;
             text-decoration: none;
-            transition: transform 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            min-height: 40px;
         }
 
-        .logo:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-gradient);
+        .sidebar-logo .logo-icon-side {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            flex-shrink: 0;
         }
 
-        .logo-text h1 {
-            font-size: 1.6rem;
+        .sidebar-logo .logo-text-side {
+            font-size: 1.35rem;
             font-weight: 700;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 2px;
+            color: var(--text-primary);
+            opacity: 0;
+            transition: opacity 0.15s ease 0.1s;
         }
 
-        .logo-text p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+        .sidebar.expanded .sidebar-logo .logo-text-side {
+            opacity: 1;
         }
 
-        /* ===== THEME SWITCH ===== */
-        .theme-switch {
-            position: relative;
-            width: 52px;
-            height: 28px;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            border: 2px solid var(--border-color);
-            transition: var(--transition);
-        }
+        .logo-text-side .accent-x { color: var(--primary); }
 
-        .theme-switch:hover {
-            border-color: var(--primary);
-        }
-
-        .theme-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .dark-mode .theme-switch::after {
-            transform: translateX(24px);
-            background: var(--primary-light);
-        }
-
-        /* ===== TABS ===== */
-        .tabs-container {
-            margin: 30px auto;
-            max-width: 400px;
-        }
-
-        .tabs {
+        .sidebar-nav {
             display: flex;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: 8px;
-            position: relative;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
         }
 
-        .tab-btn {
-            flex: 1;
-            padding: 14px 24px;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border-radius: var(--radius-md);
-            transition: var(--transition);
+        .sidebar-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            z-index: 1;
+            gap: 10px;
+            height: 44px;
+            padding: 0 10px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+            white-space: nowrap;
+            overflow: hidden;
+            text-align: left;
+            width: 100%;
+            font-family: inherit;
+            position: relative;
         }
 
-        .tab-btn:hover {
-            color: var(--primary);
-        }
-
-        .tab-btn.active {
+        .sidebar-item:hover {
+            background: var(--bg-tertiary);
             color: var(--text-primary);
         }
 
-        .tab-indicator {
+        .sidebar-item.active {
+            background: var(--primary-10);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-item.active::before {
+            content: '';
             position: absolute;
-            top: 8px;
-            height: calc(100% - 16px);
-            background: var(--card-bg);
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .sidebar-item .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-item .nav-label {
+            opacity: 0;
+            transition: opacity 0.15s ease 0.1s;
+        }
+
+        .sidebar.expanded .sidebar-item .nav-label { opacity: 1; }
+
+        .sidebar-toggle {
+            margin-top: auto;
+            width: 36px;
+            height: 36px;
+            background: var(--bg-secondary);
+            border: none;
             border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 0;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            align-self: center;
         }
 
-        /* ===== TAB CONTENT ===== */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
+        .sidebar-toggle:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .sidebar-toggle:active {
+            transform: scale(0.92);
+            transition: transform 0.1s ease;
         }
 
-        .tab-content.active {
-            display: block;
+        .sidebar-toggle .toggle-icon {
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ===== HERO SECTION ===== */
+        .sidebar.expanded .sidebar-toggle .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.expanded ~ .main-content {
+            margin-left: var(--sidebar-expanded);
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            height: var(--topbar-height);
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-greeting {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .topbar-greeting .greeting-emoji {
+            font-size: 1.125rem;
+        }
+
+        .topbar-search {
+            flex: 1;
+            max-width: 420px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .topbar-search input {
+            width: 100%;
+            height: 38px;
+            padding: 0 12px 0 40px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .topbar-search input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .topbar-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-20);
+        }
+
+        .topbar-search .search-icon-left {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        .topbar-search .search-hint {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 0.6875rem;
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .topbar-btn {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .topbar-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .topbar-btn.active-view {
+            background: var(--primary-10);
+            color: var(--primary);
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page-content {
+            padding: 28px 32px;
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .page {
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        /* ===== HERO ===== */
         .hero {
             text-align: center;
-            padding: 50px 0 30px;
+            padding: 8px 0 20px;
             max-width: 600px;
             margin: 0 auto;
         }
 
         .hero h2 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
-            margin-bottom: 16px;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1.2;
+            margin-bottom: 6px;
+            color: var(--text-primary);
         }
 
-        .hero p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 1.1rem;
+        .hero .accent-dot { color: var(--primary); }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* ===== STATS BAR ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
-        /* ===== SEARCH ===== */
-        .search-container {
-            max-width: 500px;
-            margin: 40px auto;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 16px 24px 16px 52px;
+        .stat-card {
             background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-full);
-            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .stat-card.primary-stat {
+            border-left: 3px solid var(--primary);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+        }
+
+        .stat-label {
+            font-size: 0.6875rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-card.primary-stat .stat-value { color: var(--primary); }
+
+        .stat-detail {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* ===== RECENT SECTION ===== */
+        .recent-section { margin-bottom: 24px; }
+
+        .section-header {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            text-decoration: none;
             color: var(--text-primary);
             transition: var(--transition);
         }
 
-        .search-input:focus {
-            outline: none;
+        .recent-item:hover {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-20);
+            box-shadow: var(--shadow-sm);
         }
 
-        .search-icon {
+        .recent-time {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* ===== PINNED SECTION ===== */
+        .pinned-section { margin-bottom: 24px; }
+
+        .pinned-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pinned-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .pinned-pill:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+            padding-right: 32px;
+        }
+
+        .pinned-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-indigo { background: #6366f1; }
+        .dot-green { background: #22c55e; }
+        .dot-orange { background: #f97316; }
+        .dot-purple { background: #a855f7; }
+
+        .pinned-unpin {
             position: absolute;
-            left: 24px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--text-tertiary);
-            pointer-events: none;
+            font-size: 0.625rem;
+            opacity: 0;
+            transition: opacity 0.15s ease;
         }
 
+        .pinned-pill:hover .pinned-unpin { opacity: 1; }
+
         /* ===== CATEGORIES ===== */
+        .categories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 16px;
+        }
+
+        .categories-grid.list-view {
+            grid-template-columns: 1fr;
+            max-width: 800px;
         }
 
         .category-card {
             background: var(--card-bg);
-            border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
             overflow: hidden;
             transition: var(--transition);
+            opacity: 0;
+            animation: cardSlideIn 0.3s ease forwards;
+        }
+
+        @keyframes cardSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
         }
 
+        .c-indigo { border-left: 3px solid #6366f1; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+        .c-green { border-left: 3px solid #22c55e; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+        .c-orange { border-left: 3px solid #f97316; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+        .c-purple { border-left: 3px solid #a855f7; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+
         .category-header {
-            padding: 24px;
+            padding: 18px 20px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
+            user-select: none;
+            outline: none;
+            position: relative;
+        }
+
+        .category-header:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: -2px;
+            border-radius: var(--radius-lg);
         }
 
         .category-info {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .category-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--primary-gradient);
-            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
 
+        .icon-indigo { background: #6366f1; }
+        .icon-green { background: #22c55e; }
+        .icon-orange { background: #f97316; }
+        .icon-purple { background: #a855f7; }
+
         .category-name {
             font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--text-primary);
+            font-size: 0.9375rem;
         }
 
-        .category-desc {
+        .category-count {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .category-header:hover .category-actions { opacity: 1; }
+
+        .cat-action-btn {
+            width: 28px;
+            height: 28px;
+            background: none;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
             font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
+            transition: var(--transition);
+        }
+
+        .cat-action-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
         .toggle-btn {
             background: none;
             border: none;
-            color: var(--text-secondary);
+            color: var(--text-tertiary);
             cursor: pointer;
-            padding: 8px;
+            padding: 4px;
             border-radius: var(--radius-sm);
             transition: var(--transition);
-            width: 40px;
-            height: 40px;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .toggle-btn:hover {
-            background: var(--primary-10);
-            color: var(--primary);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
         .toggle-icon {
-            transition: transform 0.3s ease;
-            font-size: 1.5rem;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.3rem;
         }
 
         .category-card.active .toggle-icon {
             transform: rotate(180deg);
         }
 
-        /* ===== LINKS ===== */
+        /* Links container */
         .links-container {
-            padding: 0;
-            max-height: 0;
             overflow: hidden;
-            transition: all 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+            padding: 0 20px;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.25s ease;
         }
 
         .category-card.active .links-container {
-            padding: 24px;
-            max-height: 2000px;
+            opacity: 1;
+            padding: 0 20px 18px;
         }
 
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 8px;
         }
 
         .link-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 20px;
+            gap: 10px;
+            padding: 10px 12px;
             background: var(--bg-secondary);
             border-radius: var(--radius-md);
             text-decoration: none;
             color: var(--text-primary);
             border: 1px solid transparent;
             transition: var(--transition);
+            outline: none;
             position: relative;
-            overflow: hidden;
-        }
-
-        .link-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 100%;
-            background: var(--primary-gradient);
-            opacity: 0;
-            transition: opacity 0.2s ease;
+            min-height: 48px;
         }
 
         .link-item:hover {
             border-color: var(--primary);
-            transform: translateX(8px);
             background: var(--card-bg);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
         }
 
-        .link-item:hover::before {
-            opacity: 1;
+        .link-item:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
-        .link-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--primary-10);
-            border-radius: var(--radius-md);
+        .link-icon-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
-            font-size: 1.5rem;
             flex-shrink: 0;
-            transition: var(--transition);
+            overflow: hidden;
+            background: var(--bg-tertiary);
         }
 
-        .link-item:hover .link-icon {
-            background: var(--primary-gradient);
-            color: white;
-            transform: scale(1.1);
+        .link-icon-wrap img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+
+        .link-icon-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--primary);
+            background: var(--primary-10);
+            flex-shrink: 0;
+        }
+
+        .link-icon-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
         .link-content {
@@ -472,17 +827,20 @@
         }
 
         .link-name {
-            font-weight: 600;
-            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .link-url {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-family: 'SF Mono', monospace;
+            font-size: 0.71875rem;
+            color: var(--text-tertiary);
+            font-family: 'SF Mono', 'Consolas', monospace;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -491,710 +849,929 @@
         .link-badge {
             background: var(--primary-10);
             color: var(--primary);
-            padding: 4px 12px;
+            padding: 1px 7px;
             border-radius: var(--radius-full);
-            font-size: 0.75rem;
+            font-size: 0.675rem;
             font-weight: 600;
-            margin-left: 8px;
+            flex-shrink: 0;
         }
 
-        /* ===== DEBUG TAB ===== */
-        .debug-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 0;
+        .link-actions {
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            flex-shrink: 0;
         }
 
-        .debug-section {
+        .link-item:hover .link-actions { opacity: 1; }
+
+        .link-action-btn {
+            width: 28px;
+            height: 28px;
+            background: none;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .link-action-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .link-action-btn.pin-active {
+            color: #f59e0b;
+        }
+
+        /* ===== SETTINGS ===== */
+        .settings-section {
+            max-width: 560px;
+            margin: 40px auto;
+        }
+
+        .settings-card {
             background: var(--card-bg);
-            border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
             padding: 24px;
-            margin-bottom: 24px;
         }
 
-        .debug-title {
-            font-size: 1.2rem;
+        .settings-title {
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--primary);
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .debug-grid {
-            display: grid;
-            gap: 16px;
-        }
-
-        .info-row {
+        .setting-row {
             display: flex;
             justify-content: space-between;
-            padding: 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-md);
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .info-label {
-            color: var(--text-secondary);
+        .setting-row:last-child { border-bottom: none; }
+
+        .setting-label { font-weight: 500; font-size: 0.9rem; }
+        .setting-desc { font-size: 0.8rem; color: var(--text-tertiary); margin-top: 2px; }
+
+        .theme-toggle-btn {
+            padding: 7px 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
             font-weight: 500;
-        }
-
-        .info-value {
-            font-family: 'SF Mono', monospace;
-            color: var(--text-primary);
-        }
-
-        .data-display {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            margin-top: 16px;
-            overflow-x: auto;
-        }
-
-        .data-display pre {
-            margin: 0;
-            font-family: 'SF Mono', monospace;
             font-size: 0.85rem;
-            line-height: 1.5;
-            color: var(--text-primary);
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            transition: var(--transition);
+            font-family: inherit;
         }
 
-        /* ===== EMPTY STATES ===== */
+        .theme-toggle-btn:hover { background: var(--primary-dark); }
+
+        .btn-secondary {
+            background: var(--bg-tertiary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color) !important;
+        }
+
+        /* ===== EMPTY & LOADING ===== */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 48px 20px;
             color: var(--text-secondary);
         }
 
         .empty-icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            margin-bottom: 16px;
             color: var(--text-tertiary);
             opacity: 0.5;
         }
 
         .empty-title {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
+            font-size: 1.15rem;
+            margin-bottom: 6px;
             color: var(--text-primary);
         }
 
-        /* ===== LOADING ===== */
         .loading {
             text-align: center;
             padding: 60px 20px;
         }
 
         .spinner {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             border: 3px solid var(--border-color);
             border-top-color: var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .categories-grid { grid-template-columns: 1fr; }
+            .topbar-greeting { display: none; }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 0 16px;
-            }
-            
-            .categories-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .links-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            .tabs-container {
-                max-width: 100%;
-            }
-            
-            .tab-btn {
-                padding: 12px 16px;
-                font-size: 0.9rem;
-            }
+            .topbar-greeting { display: none; }
         }
 
-        @media (max-width: 480px) {
-            .hero h2 {
-                font-size: 1.8rem;
+        @media (max-width: 640px) {
+            .sidebar {
+                width: 0;
+                padding: 16px 0;
+                border-right: none;
             }
-            
-            .category-header {
-                padding: 20px;
+            .sidebar.expanded {
+                width: var(--sidebar-expanded);
+                border-right: 1px solid var(--border-color);
+                padding: 16px 12px;
             }
-            
-            .category-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.3rem;
-            }
-            
-            .search-input {
-                padding: 14px 20px 14px 48px;
-            }
-            
-            .debug-section {
-                padding: 20px;
-            }
-        }
-
-        /* ===== UTILITIES ===== */
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .gradient-text {
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .card-hover {
-            transition: var(--transition);
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            .main-content { margin-left: 0; }
+            .sidebar.expanded ~ .main-content { margin-left: var(--sidebar-expanded); }
+            .topbar { padding: 0 12px; }
+            .topbar-search .search-hint { display: none; }
+            .page-content { padding: 16px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .hero h2 { font-size: 1.6rem; }
+            .links-grid { grid-template-columns: 1fr; }
+            .recent-grid { grid-template-columns: 1fr; }
+            .category-actions { opacity: 1; }
+            .link-actions { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="#" class="logo">
-                <div class="logo-icon">
-                    <iconify-icon icon="mdi:star-four-points"></iconify-icon>
-                </div>
-                <div class="logo-text">
-                    <h1>Nova</h1>
-                    <p>Personal Dashboard</p>
-                </div>
-            </a>
-            
-            <div class="theme-switch" id="themeSwitch" title="Toggle Theme"></div>
-        </div>
-    </nav>
-
-    <!-- Tabs -->
-    <div class="container tabs-container">
-        <div class="tabs">
-            <div class="tab-indicator" id="tabIndicator"></div>
-            <button class="tab-btn active" data-tab="dashboard">
-                <iconify-icon icon="mdi:view-dashboard"></iconify-icon>
-                Dashboard
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <a href="#" class="sidebar-logo">
+            <div class="logo-icon-side">
+                <iconify-icon icon="mdi:hexagon-multiple"></iconify-icon>
+            </div>
+            <span class="logo-text-side">Ne<span class="accent-x">x</span>us</span>
+        </a>
+        
+        <nav class="sidebar-nav">
+            <button class="sidebar-item active" data-page="dashboard" aria-label="Dashboard">
+                <span class="nav-icon"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon></span>
+                <span class="nav-label">Dashboard</span>
             </button>
-            <button class="tab-btn" data-tab="debug">
-                <iconify-icon icon="mdi:bug"></iconify-icon>
-                Debug
+            <button class="sidebar-item" data-page="bookmarks" aria-label="Bookmarks">
+                <span class="nav-icon"><iconify-icon icon="mdi:bookmark-multiple-outline"></iconify-icon></span>
+                <span class="nav-label">Bookmarks</span>
             </button>
-        </div>
-    </div>
+            <button class="sidebar-item" data-page="recent" aria-label="Recent">
+                <span class="nav-icon"><iconify-icon icon="mdi:history"></iconify-icon></span>
+                <span class="nav-label">Recent</span>
+            </button>
+            <button class="sidebar-item" data-page="settings" aria-label="Settings">
+                <span class="nav-icon"><iconify-icon icon="mdi:cog-outline"></iconify-icon></span>
+                <span class="nav-label">Settings</span>
+            </button>
+        </nav>
+        
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            <iconify-icon class="toggle-icon" icon="mdi:chevron-right"></iconify-icon>
+        </button>
+    </aside>
 
     <!-- Main Content -->
-    <main class="container">
-        <!-- Dashboard Tab -->
-        <div id="dashboardTab" class="tab-content active">
-            <section class="hero">
-                <h2>Your Digital Workspace</h2>
-                <p>All your essential links and tools organized in one beautiful dashboard</p>
-            </section>
-
-            <div class="search-container">
-                <div class="search-icon">
-                    <iconify-icon icon="mdi:magnify"></iconify-icon>
-                </div>
-                <input type="text" 
-                       class="search-input" 
-                       id="searchInput" 
-                       placeholder="Search links and categories..."
-                       autocomplete="off">
+    <div class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-greeting" id="greeting">
+                <span class="greeting-emoji" id="greetingEmoji">👋</span>
+                <span id="greetingText">Good morning</span>
             </div>
 
-            <div class="categories-grid" id="categoriesGrid">
-                <!-- Will be populated dynamically -->
+            <div class="topbar-search">
+                <iconify-icon class="search-icon-left" icon="mdi:magnify"></iconify-icon>
+                <input type="text" id="searchInput" placeholder="Search links and categories..." autocomplete="off" aria-label="Search">
+                <span class="search-hint" id="searchHint">⌘K</span>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="topbar-btn" id="viewToggleGrid" title="Grid view" aria-label="Grid view">
+                    <iconify-icon icon="mdi:view-grid"></iconify-icon>
+                </button>
+                <button class="topbar-btn" id="viewToggleList" title="List view" aria-label="List view">
+                    <iconify-icon icon="mdi:view-list"></iconify-icon>
+                </button>
+                <button class="topbar-btn" id="themeSwitchTop" title="Toggle theme" aria-label="Toggle dark mode">
+                    <iconify-icon id="themeIcon" icon="mdi:weather-sunny"></iconify-icon>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <div class="page active" id="page-dashboard">
+                <section class="hero">
+                    <h2>Your Digital <span class="accent-dot">Workspace</span></h2>
+                    <p>All your essential links and tools in one place</p>
+                </section>
+                <div class="stats-grid" id="statsGrid"></div>
+                <div class="recent-section" id="recentSection"></div>
+                <div class="pinned-section" id="pinnedSection"></div>
+                <div class="categories-header">
+                    <span class="section-header">Categories</span>
+                </div>
+                <div class="categories-grid" id="categoriesGrid"></div>
+            </div>
+
+            <div class="page" id="page-bookmarks">
+                <div class="hero">
+                    <h2>Bookmarks</h2>
+                    <p>Your pinned and favorite links</p>
+                </div>
+                <div class="categories-grid" id="bookmarksGrid"></div>
+            </div>
+
+            <div class="page" id="page-recent">
+                <div class="hero">
+                    <h2>Recently Visited</h2>
+                    <p>Your browsing history</p>
+                </div>
+                <div class="recent-grid" id="recentFullGrid"></div>
+            </div>
+
+            <div class="page" id="page-settings">
+                <div class="settings-section">
+                    <div class="settings-card">
+                        <div class="settings-title"><iconify-icon icon="mdi:cog"></iconify-icon> Settings</div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Dark Mode</div>
+                                <div class="setting-desc">Toggle between light and dark themes</div>
+                            </div>
+                            <button class="theme-toggle-btn" id="themeToggleSettings">Toggle Theme</button>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Sidebar</div>
+                                <div class="setting-desc">Expand or collapse the sidebar</div>
+                            </div>
+                            <button class="theme-toggle-btn btn-secondary" id="sidebarToggleSettings">Toggle Sidebar</button>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Clear History</div>
+                                <div class="setting-desc">Remove all recently visited links</div>
+                            </div>
+                            <button class="theme-toggle-btn btn-secondary" id="clearHistory">Clear</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Debug Tab -->
-        <div id="debugTab" class="tab-content">
-            <div class="debug-content">
-                <div class="debug-section">
-                    <div class="debug-title">
-                        <iconify-icon icon="mdi:information"></iconify-icon>
-                        System Information
-                    </div>
-                    <div class="debug-grid" id="systemInfo">
-                        <!-- Will be populated dynamically -->
-                    </div>
-                </div>
-
-                <div class="debug-section">
-                    <div class="debug-title">
-                        <iconify-icon icon="mdi:database"></iconify-icon>
-                        Data Status
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Categories Loaded:</span>
-                        <span class="info-value" id="categoriesCount">0</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Links Loaded:</span>
-                        <span class="info-value" id="linksCount">0</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Current Theme:</span>
-                        <span class="info-value" id="currentTheme">Light</span>
-                    </div>
-                </div>
-
-                <div class="debug-section">
-                    <div class="debug-title">
-                        <iconify-icon icon="mdi:code-json"></iconify-icon>
-                        JSON Structure
-                    </div>
-                    <div class="data-display">
-                        <pre id="jsonStructure">
-Data structure will appear here...
-Make sure list.json and links.json are in the same directory
-                        </pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading State -->
-        <div class="loading" id="loading">
+        <div class="loading" id="loading" style="display: none;">
             <div class="spinner"></div>
             <p>Loading your dashboard...</p>
         </div>
-    </main>
+    </div>
 
     <script>
-        // === APP STATE ===
         const appState = {
             categories: [],
             links: [],
-            currentTab: 'dashboard',
+            currentPage: 'dashboard',
             searchQuery: '',
             expandedCategories: new Set(),
-            isLoading: true
+            dataLoaded: false,
+            cacheTimestamp: null,
+            sidebarExpanded: false,
+            currentView: 'grid',
+            recentLinks: [],
+            pinnedLinks: []
         };
 
-        // === DOM ELEMENTS ===
-        const elements = {
+        const $ = s => document.querySelector(s);
+        const $$ = s => document.querySelectorAll(s);
+
+        const els = {
             body: document.body,
-            themeSwitch: document.getElementById('themeSwitch'),
-            tabIndicator: document.getElementById('tabIndicator'),
-            categoriesGrid: document.getElementById('categoriesGrid'),
-            loading: document.getElementById('loading'),
-            searchInput: document.getElementById('searchInput'),
-            systemInfo: document.getElementById('systemInfo'),
-            jsonStructure: document.getElementById('jsonStructure'),
-            currentTheme: document.getElementById('currentTheme'),
-            categoriesCount: document.getElementById('categoriesCount'),
-            linksCount: document.getElementById('linksCount')
+            sidebar: $('#sidebar'),
+            sidebarToggle: $('#sidebarToggle'),
+            searchInput: $('#searchInput'),
+            searchHint: $('#searchHint'),
+            categoriesGrid: $('#categoriesGrid'),
+            statsGrid: $('#statsGrid'),
+            pinnedSection: $('#pinnedSection'),
+            recentSection: $('#recentSection'),
+            recentFullGrid: $('#recentFullGrid'),
+            bookmarksGrid: $('#bookmarksGrid'),
+            loading: $('#loading'),
+            greetingEmoji: $('#greetingEmoji'),
+            greetingText: $('#greetingText'),
+            themeSwitchTop: $('#themeSwitchTop'),
+            themeIcon: $('#themeIcon'),
+            themeToggleSettings: $('#themeToggleSettings'),
+            sidebarToggleSettings: $('#sidebarToggleSettings'),
+            clearHistory: $('#clearHistory'),
+            viewToggleGrid: $('#viewToggleGrid'),
+            viewToggleList: $('#viewToggleList')
         };
 
-        // === TAB MANAGEMENT ===
-        function setupTabs() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            // Update tab indicator position
-            function updateTabIndicator() {
-                const activeTab = document.querySelector('.tab-btn.active');
-                if (activeTab) {
-                    const tabWidth = activeTab.offsetWidth;
-                    const tabLeft = activeTab.offsetLeft;
-                    elements.tabIndicator.style.width = `${tabWidth}px`;
-                    elements.tabIndicator.style.transform = `translateX(${tabLeft}px)`;
-                }
-            }
-            
-            // Switch tabs
-            function switchTab(tabId) {
-                // Update buttons
-                tabButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tabId);
-                });
-                
-                // Update content
-                tabContents.forEach(content => {
-                    content.classList.toggle('active', content.id === `${tabId}Tab`);
-                });
-                
-                appState.currentTab = tabId;
-                updateTabIndicator();
-                
-                // Load data if switching to dashboard
-                if (tabId === 'dashboard' && appState.categories.length === 0) {
-                    loadData();
-                }
-            }
-            
-            // Add click events
-            tabButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    switchTab(btn.dataset.tab);
-                });
+        function sanitize(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function getDomain(url) {
+            try { return new URL(url).hostname.replace('www.', ''); } catch { return null; }
+        }
+
+        function getFaviconUrl(url) {
+            const domain = getDomain(url);
+            return domain ? `https://favicon.im/${domain}` : '';
+        }
+
+        function getAccent(accent) {
+            return accent || 'indigo';
+        }
+
+        function getColorVar(accent) {
+            const m = { indigo: 'primary', green: 'green', orange: 'orange', purple: 'purple' };
+            return m[accent] || 'primary';
+        }
+
+        function getDotClass(accent) { return `dot-${getAccent(accent)}`; }
+
+        // ===== SIDEBAR =====
+        function setupSidebar() {
+            els.sidebarToggle.addEventListener('click', () => {
+                appState.sidebarExpanded = !appState.sidebarExpanded;
+                els.sidebar.classList.toggle('expanded', appState.sidebarExpanded);
+                localStorage.setItem('nexus-sidebar', appState.sidebarExpanded ? 'expanded' : 'collapsed');
             });
-            
-            // Initial update
-            updateTabIndicator();
-            
-            // Update on window resize
-            window.addEventListener('resize', updateTabIndicator);
+
+            $$('.sidebar-item').forEach(item => {
+                item.addEventListener('click', () => navigateTo(item.dataset.page));
+            });
+
+            if ((localStorage.getItem('nexus-sidebar') || 'collapsed') === 'expanded') {
+                appState.sidebarExpanded = true;
+                els.sidebar.classList.add('expanded');
+            }
+
+            els.sidebarToggleSettings.addEventListener('click', () => els.sidebarToggle.click());
         }
 
-        // === THEME MANAGEMENT ===
+        function navigateTo(page) {
+            appState.currentPage = page;
+            $$('.sidebar-item').forEach(i => i.classList.toggle('active', i.dataset.page === page));
+            $$('.page').forEach(p => p.classList.toggle('active', p.id === `page-${page}`));
+            if (page === 'bookmarks' && appState.dataLoaded) renderBookmarks();
+            if (page === 'recent' && appState.dataLoaded) renderRecentFull();
+        }
+
+        // ===== GREETING =====
+        function setupGreeting() {
+            updateGreeting();
+            setInterval(updateGreeting, 60000);
+        }
+
+        function updateGreeting() {
+            const h = new Date().getHours();
+            let e, t;
+            if (h >= 5 && h < 12) { e = '🌅'; t = 'Good morning'; }
+            else if (h >= 12 && h < 17) { e = '☀️'; t = 'Good afternoon'; }
+            else if (h >= 17 && h < 21) { e = '🌆'; t = 'Good evening'; }
+            else { e = '🌙'; t = 'Good night'; }
+            els.greetingEmoji.textContent = e;
+            els.greetingText.textContent = t;
+        }
+
+        // ===== THEME =====
         function setupTheme() {
-            // Load saved theme or default to light
-            const savedTheme = localStorage.getItem('nova-theme') || 'light';
-            
-            // Apply theme
-            if (savedTheme === 'dark') {
-                elements.body.classList.add('dark-mode');
+            const saved = localStorage.getItem('nexus-theme') || 'light';
+            if (saved === 'dark') els.body.classList.add('dark-mode');
+            updateThemeIcon();
+
+            function toggle() {
+                els.body.classList.toggle('dark-mode');
+                localStorage.setItem('nexus-theme', els.body.classList.contains('dark-mode') ? 'dark' : 'light');
+                updateThemeIcon();
             }
-            
-            // Update display
-            updateThemeDisplay();
-            
-            // Add click event
-            elements.themeSwitch.addEventListener('click', toggleTheme);
+
+            els.themeSwitchTop.addEventListener('click', toggle);
+            els.themeToggleSettings.addEventListener('click', toggle);
         }
 
-        function toggleTheme() {
-            const isDark = elements.body.classList.contains('dark-mode');
-            
-            if (isDark) {
-                elements.body.classList.remove('dark-mode');
-                localStorage.setItem('nova-theme', 'light');
-            } else {
-                elements.body.classList.add('dark-mode');
-                localStorage.setItem('nova-theme', 'dark');
-            }
-            
-            updateThemeDisplay();
+        function updateThemeIcon() {
+            const isDark = els.body.classList.contains('dark-mode');
+            els.themeIcon.setAttribute('icon', isDark ? 'mdi:weather-night' : 'mdi:weather-sunny');
         }
 
-        function updateThemeDisplay() {
-            const isDark = elements.body.classList.contains('dark-mode');
-            elements.currentTheme.textContent = isDark ? 'Dark' : 'Light';
+        // ===== VIEW TOGGLE =====
+        function setupViewToggle() {
+            const saved = localStorage.getItem('nexus-view') || 'grid';
+            appState.currentView = saved;
+            updateView();
+
+            els.viewToggleGrid.addEventListener('click', () => {
+                appState.currentView = 'grid';
+                localStorage.setItem('nexus-view', 'grid');
+                updateView();
+            });
+            els.viewToggleList.addEventListener('click', () => {
+                appState.currentView = 'list';
+                localStorage.setItem('nexus-view', 'list');
+                updateView();
+            });
         }
 
-        // === DATA LOADING ===
-        async function loadData() {
+        function updateView() {
+            els.viewToggleGrid.classList.toggle('active-view', appState.currentView === 'grid');
+            els.viewToggleList.classList.toggle('active-view', appState.currentView === 'list');
+            els.categoriesGrid.classList.toggle('list-view', appState.currentView === 'list');
+        }
+
+        // ===== RECENT LINKS =====
+        function loadRecent() {
+            try {
+                appState.recentLinks = JSON.parse(localStorage.getItem('nexus-recent') || '[]');
+            } catch { appState.recentLinks = []; }
+        }
+
+        function saveRecent() {
+            localStorage.setItem('nexus-recent', JSON.stringify(appState.recentLinks.slice(0, 20)));
+        }
+
+        function addRecent(link) {
+            appState.recentLinks = appState.recentLinks.filter(l => l.path !== link.path);
+            appState.recentLinks.unshift({ ...link, timestamp: Date.now() });
+            if (appState.recentLinks.length > 20) appState.recentLinks = appState.recentLinks.slice(0, 20);
+            saveRecent();
+        }
+
+        function clearRecent() {
+            appState.recentLinks = [];
+            saveRecent();
+            if (appState.currentPage === 'recent') renderRecentFull();
+            renderRecentSection();
+        }
+
+        function timeAgo(ts) {
+            const s = Math.floor((Date.now() - ts) / 1000);
+            if (s < 60) return 'Just now';
+            if (s < 3600) return `${Math.floor(s / 60)}m`;
+            if (s < 86400) return `${Math.floor(s / 3600)}h`;
+            return `${Math.floor(s / 86400)}d`;
+        }
+
+        // ===== DATA LOADING =====
+        async function loadData(force = false) {
+            if (appState.dataLoaded && !force) { renderDashboard(); return; }
             try {
                 showLoading();
-                
-                // Load categories
-                const categoriesResponse = await fetch('list.json');
-                if (!categoriesResponse.ok) throw new Error('Failed to load categories');
-                appState.categories = await categoriesResponse.json();
-                
-                // Load links
-                const linksResponse = await fetch('links.json');
-                if (!linksResponse.ok) throw new Error('Failed to load links');
-                appState.links = await linksResponse.json();
-                
-                // Validate data structure
-                validateData();
-                
-                // Update UI
-                renderCategories();
-                updateDebugInfo();
+                const [cRes, lRes] = await Promise.all([fetch('list.json'), fetch('links.json')]);
+                if (!cRes.ok || !lRes.ok) throw new Error('Failed to load');
+                appState.categories = await cRes.json();
+                appState.links = await lRes.json();
+                if (!Array.isArray(appState.categories) || !Array.isArray(appState.links)) throw new Error('Invalid structure');
+                appState.dataLoaded = true;
+                appState.cacheTimestamp = Date.now();
+                loadPinned();
+                loadRecent();
+                renderDashboard();
                 hideLoading();
-                
-            } catch (error) {
-                console.error('Data loading error:', error);
-                showError('Failed to load data. Please check console for details.');
+            } catch (e) {
+                console.error(e);
+                showError('Failed to load data. Make sure list.json and links.json exist.');
+                hideLoading();
             }
         }
 
-        function validateData() {
-            // Check if data has the expected structure
-            const isValid = Array.isArray(appState.categories) && Array.isArray(appState.links);
-            
-            if (!isValid) {
-                throw new Error('Invalid data structure in JSON files');
-            }
-            
-            // Update counters
-            elements.categoriesCount.textContent = appState.categories.length;
-            elements.linksCount.textContent = appState.links.length;
+        function loadPinned() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('nexus-pinned') || '[]');
+                appState.pinnedLinks = saved;
+                appState.links.forEach(link => {
+                    if (saved.includes(link.path) && !link.pinned) link.pinned = true;
+                });
+            } catch { appState.pinnedLinks = []; }
         }
 
-        // === RENDER CATEGORIES ===
-        function renderCategories() {
-            elements.categoriesGrid.innerHTML = '';
-            
-            // Filter categories based on search
-            const filteredCategories = appState.searchQuery ? 
-                appState.categories.filter(cat => 
-                    cat.name.toLowerCase().includes(appState.searchQuery.toLowerCase()) ||
-                    cat.description?.toLowerCase().includes(appState.searchQuery.toLowerCase()) ||
-                    appState.links.some(link => 
-                        link.catalog === cat.id && 
-                        link.name.toLowerCase().includes(appState.searchQuery.toLowerCase())
-                    )
-                ) : appState.categories;
-            
-            if (filteredCategories.length === 0) {
-                showEmptyState('No categories found matching your search');
+        function savePinned() {
+            const pinned = appState.links.filter(l => l.pinned).map(l => l.path);
+            localStorage.setItem('nexus-pinned', JSON.stringify(pinned));
+        }
+
+        function togglePin(linkPath) {
+            const link = appState.links.find(l => l.path === linkPath);
+            if (!link) return;
+            link.pinned = !link.pinned;
+            savePinned();
+            renderDashboard();
+            if (appState.currentPage === 'bookmarks') renderBookmarks();
+        }
+
+        function togglePinAll(catalogId) {
+            const links = appState.links.filter(l => l.catalog === catalogId);
+            const allPinned = links.every(l => l.pinned);
+            links.forEach(l => l.pinned = !allPinned);
+            savePinned();
+            renderDashboard();
+            if (appState.currentPage === 'bookmarks') renderBookmarks();
+        }
+
+        function openAll(catalogId) {
+            appState.links.filter(l => l.catalog === catalogId).forEach(l => window.open(l.path, '_blank'));
+        }
+
+        // ===== RENDER DASHBOARD =====
+        function renderDashboard() {
+            if (!appState.dataLoaded) return;
+            renderStats();
+            renderRecentSection();
+            renderPinned();
+            renderCategories();
+        }
+
+        function renderStats() {
+            const total = appState.links.length;
+            const pinned = appState.links.filter(l => l.pinned).length;
+            const cats = appState.categories.length;
+            const last = appState.recentLinks[0];
+            const lastText = last ? last.name : '—';
+
+            els.statsGrid.innerHTML = `
+                <div class="stat-card primary-stat">
+                    <div class="stat-label">Total Links</div>
+                    <div class="stat-value">${total}</div>
+                    <div class="stat-detail">across ${cats} categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pinned</div>
+                    <div class="stat-value">${pinned}</div>
+                    <div class="stat-detail">quick access</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Categories</div>
+                    <div class="stat-value">${cats}</div>
+                    <div class="stat-detail">organized</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Last Opened</div>
+                    <div class="stat-value" style="font-size:1rem;">${sanitize(lastText)}</div>
+                    <div class="stat-detail">${last ? timeAgo(last.timestamp) : '—'}</div>
+                </div>
+            `;
+        }
+
+        function renderRecentSection() {
+            if (appState.recentLinks.length === 0) {
+                els.recentSection.innerHTML = '';
                 return;
             }
-            
-            // Create category cards
-            filteredCategories.forEach(category => {
-                const categoryLinks = appState.links.filter(link => link.catalog === category.id);
-                const filteredLinks = appState.searchQuery ? 
-                    categoryLinks.filter(link => 
-                        link.name.toLowerCase().includes(appState.searchQuery.toLowerCase()) ||
-                        link.path.toLowerCase().includes(appState.searchQuery.toLowerCase())
-                    ) : categoryLinks;
-                
-                const categoryCard = document.createElement('div');
-                categoryCard.className = 'category-card fade-in';
-                categoryCard.dataset.categoryId = category.id;
-                
-                categoryCard.innerHTML = `
-                    <div class="category-header">
+            const items = appState.recentLinks.slice(0, 6);
+            els.recentSection.innerHTML = `
+                <div class="section-header"><iconify-icon icon="mdi:history"></iconify-icon> Recently Visited</div>
+                <div class="recent-grid">
+                    ${items.map(l => {
+                        const fav = getFaviconUrl(l.path);
+                        return `
+                            <a href="${sanitize(l.path)}" class="recent-item" target="_blank" rel="noopener noreferrer"
+                               data-path="${sanitize(l.path)}" data-name="${sanitize(l.name)}" data-icon="${sanitize(l.icon||'')}" data-catalog="${sanitize(l.catalog||'')}">
+                                <div class="link-icon-wrap">
+                                    <img src="${fav}" alt="" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=link-icon-letter>${sanitize(getDomain(l.path)?.[0]?.toUpperCase()||'?')}</div>'">
+                                </div>
+                                <span style="font-size:0.85rem;font-weight:500;">${sanitize(l.name)}</span>
+                                <span class="recent-time">${timeAgo(l.timestamp)}</span>
+                            </a>`;
+                    }).join('')}
+                </div>`;
+            els.recentSection.querySelectorAll('.recent-item').forEach(el => {
+                el.addEventListener('click', () => addRecent({ name: el.dataset.name, path: el.dataset.path, icon: el.dataset.icon, catalog: el.dataset.catalog }));
+            });
+        }
+
+        function renderRecentFull() {
+            if (appState.recentLinks.length === 0) {
+                els.recentFullGrid.innerHTML = `<div class="empty-state"><iconify-icon class="empty-icon" icon="mdi:history"></iconify-icon><div class="empty-title">No Recent Links</div><p>Links you visit will appear here</p></div>`;
+                return;
+            }
+            els.recentFullGrid.innerHTML = appState.recentLinks.map(l => {
+                const fav = getFaviconUrl(l.path);
+                return `
+                    <a href="${sanitize(l.path)}" class="recent-item" target="_blank" rel="noopener noreferrer"
+                       data-path="${sanitize(l.path)}" data-name="${sanitize(l.name)}" data-icon="${sanitize(l.icon||'')}" data-catalog="${sanitize(l.catalog||'')}">
+                        <div class="link-icon-wrap">
+                            <img src="${fav}" alt="" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=link-icon-letter>${sanitize(getDomain(l.path)?.[0]?.toUpperCase()||'?')}</div>'">
+                        </div>
+                        <div>
+                            <div style="font-size:0.85rem;font-weight:500;">${sanitize(l.name)}</div>
+                            <div style="font-size:0.7rem;color:var(--text-tertiary);">${sanitize(l.path)}</div>
+                        </div>
+                        <span class="recent-time">${timeAgo(l.timestamp)}</span>
+                    </a>`;
+            }).join('');
+            els.recentFullGrid.querySelectorAll('.recent-item').forEach(el => {
+                el.addEventListener('click', () => addRecent({ name: el.dataset.name, path: el.dataset.path, icon: el.dataset.icon, catalog: el.dataset.catalog }));
+            });
+        }
+
+        function renderPinned() {
+            const pinned = appState.links.filter(l => l.pinned);
+            if (pinned.length === 0) { els.pinnedSection.innerHTML = ''; return; }
+            els.pinnedSection.innerHTML = `
+                <div class="section-header"><iconify-icon icon="mdi:pin"></iconify-icon> Pinned</div>
+                <div class="pinned-pills">
+                    ${pinned.map(l => {
+                        const cat = appState.categories.find(c => c.id === l.catalog);
+                        const accent = cat?.accent || 'indigo';
+                        return `
+                            <a href="${sanitize(l.path)}" class="pinned-pill" target="_blank" rel="noopener noreferrer"
+                               data-path="${sanitize(l.path)}" data-name="${sanitize(l.name)}" data-icon="${sanitize(l.icon||'')}" data-catalog="${sanitize(l.catalog||'')}">
+                                <span class="pinned-dot ${getDotClass(accent)}"></span>
+                                ${sanitize(l.name)}
+                                <button class="pinned-unpin" data-unpin="${sanitize(l.path)}" aria-label="Unpin">×</button>
+                            </a>`;
+                    }).join('')}
+                </div>`;
+            els.pinnedSection.querySelectorAll('.pinned-pill').forEach(pill => {
+                pill.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('pinned-unpin')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        togglePin(e.target.dataset.unpin);
+                    } else {
+                        addRecent({ name: pill.dataset.name, path: pill.dataset.path, icon: pill.dataset.icon, catalog: pill.dataset.catalog });
+                    }
+                });
+            });
+        }
+
+        // ===== RENDER CATEGORIES =====
+        function renderCategories() {
+            if (!appState.dataLoaded) return;
+            const currentlyExpanded = new Set(appState.expandedCategories);
+            const q = appState.searchQuery.toLowerCase();
+            const filtered = q ? appState.categories.filter(c =>
+                c.name.toLowerCase().includes(q) || (c.description||'').toLowerCase().includes(q) ||
+                appState.links.some(l => l.catalog === c.id && (l.name.toLowerCase().includes(q) || l.path.toLowerCase().includes(q)))
+            ) : appState.categories;
+
+            if (filtered.length === 0) {
+                els.categoriesGrid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><iconify-icon class="empty-icon" icon="mdi:magnify-close"></iconify-icon><div class="empty-title">No results</div><p>Try a different search term</p></div>`;
+                return;
+            }
+
+            els.categoriesGrid.innerHTML = '';
+
+            filtered.forEach((cat, index) => {
+                const links = appState.links.filter(l => l.catalog === cat.id);
+                const fLinks = q ? links.filter(l => l.name.toLowerCase().includes(q) || l.path.toLowerCase().includes(q)) : links;
+                const accent = cat.accent || 'indigo';
+                const colorVar = getColorVar(accent);
+                const allPinned = fLinks.length > 0 && fLinks.every(l => l.pinned);
+
+                const card = document.createElement('div');
+                card.className = `category-card c-${accent}`;
+                card.style.animationDelay = `${index * 0.05}s`;
+                card.dataset.categoryId = cat.id;
+
+                card.innerHTML = `
+                    <div class="category-header" tabindex="0" role="button" aria-expanded="false">
                         <div class="category-info">
-                            <div class="category-icon">
-                                <iconify-icon icon="${category.icon || 'mdi:folder'}"></iconify-icon>
-                            </div>
+                            <div class="category-icon icon-${accent}"><iconify-icon icon="${sanitize(cat.icon||'mdi:folder')}"></iconify-icon></div>
                             <div>
-                                <div class="category-name">${category.name}</div>
-                                ${category.description ? `
-                                    <div class="category-desc">${category.description}</div>
-                                ` : ''}
+                                <div class="category-name">${sanitize(cat.name)}</div>
+                                <div class="category-count">${fLinks.length} links</div>
                             </div>
                         </div>
-                        <button class="toggle-btn" aria-label="Toggle ${category.name}">
+                        <div class="category-actions">
+                            <button class="cat-action-btn" data-pin-all="${cat.id}" title="${allPinned?'Unpin All':'Pin All'}">
+                                <iconify-icon icon="${allPinned?'mdi:star':'mdi:star-outline'}"></iconify-icon>
+                            </button>
+                            <button class="cat-action-btn" data-open-all="${cat.id}" title="Open All">
+                                <iconify-icon icon="mdi:open-in-new"></iconify-icon>
+                            </button>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle" tabindex="-1">
                             <iconify-icon class="toggle-icon" icon="mdi:chevron-down"></iconify-icon>
                         </button>
                     </div>
                     <div class="links-container">
-                        ${filteredLinks.length > 0 ? `
-                            <div class="links-grid">
-                                ${filteredLinks.map(link => `
-                                    <a href="${link.path}" 
-                                       class="link-item" 
-                                       target="_blank" 
-                                       rel="noopener noreferrer"
-                                       title="Visit ${link.name}">
-                                        <div class="link-icon">
-                                            <iconify-icon icon="${link.icon || 'mdi:link'}"></iconify-icon>
+                        ${fLinks.length > 0 ? `<div class="links-grid">
+                            ${fLinks.map(l => {
+                                const fav = getFaviconUrl(l.path);
+                                const domain = getDomain(l.path);
+                                return `
+                                    <a href="${sanitize(l.path)}" class="link-item" target="_blank" rel="noopener noreferrer"
+                                       data-path="${sanitize(l.path)}" data-name="${sanitize(l.name)}" data-icon="${sanitize(l.icon||'')}" data-catalog="${sanitize(cat.id)}">
+                                        <div class="link-icon-wrap">
+                                            <img src="${fav}" alt="" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=link-icon-letter>${sanitize(domain?.[0]?.toUpperCase()||'?')}</div>'">
                                         </div>
                                         <div class="link-content">
-                                            <div class="link-name">
-                                                ${link.name}
-                                                ${link.badge ? `<span class="link-badge">${link.badge}</span>` : ''}
-                                            </div>
-                                            <div class="link-url">${link.path}</div>
+                                            <div class="link-name">${sanitize(l.name)}${l.badge?`<span class="link-badge">${sanitize(l.badge)}</span>`:''}</div>
+                                            <div class="link-url">${sanitize(l.path)}</div>
                                         </div>
-                                    </a>
-                                `).join('')}
-                            </div>
-                        ` : `
-                            <div class="empty-state" style="padding: 20px;">
-                                <iconify-icon class="empty-icon" icon="mdi:link-off"></iconify-icon>
-                                <p>No links in this category</p>
-                            </div>
-                        `}
-                    </div>
-                `;
-                
-                elements.categoriesGrid.appendChild(categoryCard);
-                
-                // Add expand/collapse functionality
-                const header = categoryCard.querySelector('.category-header');
-                const toggleBtn = categoryCard.querySelector('.toggle-btn');
-                
-                const toggleCategory = () => {
-                    const isExpanded = categoryCard.classList.contains('active');
-                    
-                    if (isExpanded) {
-                        categoryCard.classList.remove('active');
-                        appState.expandedCategories.delete(category.id);
+                                        <div class="link-actions">
+                                            <button class="link-action-btn ${l.pinned?'pin-active':''}" data-pin="${sanitize(l.path)}" title="${l.pinned?'Unpin':'Pin'}">
+                                                <iconify-icon icon="${l.pinned?'mdi:star':'mdi:star-outline'}"></iconify-icon>
+                                            </button>
+                                            <a href="${sanitize(l.path)}" class="link-action-btn" target="_blank" rel="noopener noreferrer" title="Open">
+                                                <iconify-icon icon="mdi:open-in-new"></iconify-icon>
+                                            </a>
+                                        </div>
+                                    </a>`;
+                            }).join('')}
+                        </div>` : `<div class="empty-state" style="padding:16px;"><iconify-icon class="empty-icon" icon="mdi:link-off" style="font-size:2rem;"></iconify-icon><p>No links in this category</p></div>`}
+                    </div>`;
+
+                els.categoriesGrid.appendChild(card);
+
+                // Toggle
+                const header = card.querySelector('.category-header');
+                const toggleBtn = card.querySelector('.toggle-btn');
+                const linksContainer = card.querySelector('.links-container');
+
+                const toggleCategory = (forceState) => {
+                    const isActive = forceState !== undefined ? forceState : !card.classList.contains('active');
+                    if (isActive) {
+                        const h = linksContainer.scrollHeight + 18;
+                        linksContainer.style.maxHeight = h + 'px';
+                        card.classList.add('active');
+                        header.setAttribute('aria-expanded', 'true');
+                        appState.expandedCategories.add(cat.id);
+                        linksContainer.addEventListener('transitionend', () => {
+                            if (card.classList.contains('active')) linksContainer.style.maxHeight = 'none';
+                        }, { once: true });
                     } else {
-                        categoryCard.classList.add('active');
-                        appState.expandedCategories.add(category.id);
+                        linksContainer.style.maxHeight = linksContainer.scrollHeight + 'px';
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                linksContainer.style.maxHeight = '0';
+                                card.classList.remove('active');
+                                header.setAttribute('aria-expanded', 'false');
+                                appState.expandedCategories.delete(cat.id);
+                            });
+                        });
                     }
                 };
-                
-                header.addEventListener('click', (e) => {
-                    if (!toggleBtn.contains(e.target)) {
-                        toggleCategory();
-                    }
+
+                header.addEventListener('click', e => {
+                    if (!toggleBtn.contains(e.target) && !e.target.closest('.category-actions') && !e.target.closest('.link-action-btn')) toggleCategory();
                 });
-                
-                toggleBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleCategory();
+                header.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); toggleCategory(); } });
+                toggleBtn.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); toggleCategory(); });
+
+                // Category actions
+                card.querySelector('[data-pin-all]')?.addEventListener('click', e => { e.stopPropagation(); togglePinAll(cat.id); });
+                card.querySelector('[data-open-all]')?.addEventListener('click', e => { e.stopPropagation(); openAll(cat.id); });
+
+                // Link actions
+                card.querySelectorAll('.link-item').forEach(item => {
+                    item.addEventListener('click', e => {
+                        if (e.target.closest('.link-action-btn')) {
+                            e.preventDefault();
+                            if (e.target.closest('[data-pin]')) {
+                                togglePin(e.target.closest('[data-pin]').dataset.pin);
+                            }
+                        } else {
+                            addRecent({ name: item.dataset.name, path: item.dataset.path, icon: item.dataset.icon, catalog: item.dataset.catalog });
+                        }
+                    });
                 });
-                
-                // Auto-expand first category
-                if (filteredCategories[0] === category && !appState.searchQuery) {
-                    setTimeout(() => {
-                        categoryCard.classList.add('active');
-                        appState.expandedCategories.add(category.id);
-                    }, 300);
-                }
+
+                // Restore expanded
+                if (currentlyExpanded.has(cat.id) || (q && index===0)) requestAnimationFrame(() => toggleCategory(true));
+                else if (!q && index===0 && appState.expandedCategories.size===0) requestAnimationFrame(() => toggleCategory(true));
             });
         }
 
-        // === DEBUG INFO ===
-        function updateDebugInfo() {
-            // System information
-            elements.systemInfo.innerHTML = `
-                <div class="info-row">
-                    <span class="info-label">Browser:</span>
-                    <span class="info-value">${getBrowserInfo()}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Screen:</span>
-                    <span class="info-value">${window.screen.width} × ${window.screen.height}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Local Storage:</span>
-                    <span class="info-value">${localStorage.getItem('nova-theme') || 'Not set'}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Performance:</span>
-                    <span class="info-value">${Math.round(performance.now())}ms</span>
-                </div>
-            `;
-            
-            // JSON structure (sample only - not actual data)
-            elements.jsonStructure.textContent = JSON.stringify({
-                note: "JSON structure is loaded from external files",
-                list_json: "Contains categories with id, name, icon, description",
-                links_json: "Contains links with name, path, icon, catalog, badge"
-            }, null, 2);
+        function renderBookmarks() {
+            const pinned = appState.links.filter(l => l.pinned);
+            if (pinned.length === 0) {
+                els.bookmarksGrid.innerHTML = `<div class="empty-state"><iconify-icon class="empty-icon" icon="mdi:bookmark-off"></iconify-icon><div class="empty-title">No Bookmarks</div><p>Pin links to see them here</p></div>`;
+                return;
+            }
+            const grouped = {};
+            pinned.forEach(l => { if (!grouped[l.catalog]) grouped[l.catalog] = []; grouped[l.catalog].push(l); });
+            els.bookmarksGrid.innerHTML = '';
+
+            Object.entries(grouped).forEach(([cId, links]) => {
+                const cat = appState.categories.find(c => c.id === cId);
+                if (!cat) return;
+                const accent = cat.accent || 'indigo';
+                const colorVar = getColorVar(accent);
+
+                const card = document.createElement('div');
+                card.className = `category-card c-${accent} active`;
+                card.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-info">
+                            <div class="category-icon icon-${accent}"><iconify-icon icon="${sanitize(cat.icon||'mdi:folder')}"></iconify-icon></div>
+                            <div><div class="category-name">${sanitize(cat.name)}</div><div class="category-count">${links.length} pinned</div></div>
+                        </div>
+                        <button class="toggle-btn" tabindex="-1"><iconify-icon class="toggle-icon" icon="mdi:chevron-down" style="transform:rotate(180deg);"></iconify-icon></button>
+                    </div>
+                    <div class="links-container" style="max-height:none;opacity:1;padding:0 20px 18px;">
+                        <div class="links-grid">
+                            ${links.map(l => {
+                                const fav = getFaviconUrl(l.path);
+                                const domain = getDomain(l.path);
+                                return `
+                                    <a href="${sanitize(l.path)}" class="link-item" target="_blank" rel="noopener noreferrer"
+                                       data-path="${sanitize(l.path)}" data-name="${sanitize(l.name)}" data-icon="${sanitize(l.icon||'')}" data-catalog="${sanitize(cId)}">
+                                        <div class="link-icon-wrap">
+                                            <img src="${fav}" alt="" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=link-icon-letter>${sanitize(domain?.[0]?.toUpperCase()||'?')}</div>'">
+                                        </div>
+                                        <div class="link-content">
+                                            <div class="link-name">${sanitize(l.name)}</div>
+                                            <div class="link-url">${sanitize(l.path)}</div>
+                                        </div>
+                                        <div class="link-actions" style="opacity:1;">
+                                            <button class="link-action-btn pin-active" data-pin="${sanitize(l.path)}" title="Unpin">
+                                                <iconify-icon icon="mdi:star"></iconify-icon>
+                                            </button>
+                                        </div>
+                                    </a>`;
+                            }).join('')}
+                        </div>
+                    </div>`;
+                els.bookmarksGrid.appendChild(card);
+
+                card.querySelectorAll('.link-item').forEach(item => {
+                    item.addEventListener('click', e => {
+                        if (e.target.closest('[data-pin]')) {
+                            e.preventDefault();
+                            togglePin(e.target.closest('[data-pin]').dataset.pin);
+                        } else {
+                            addRecent({ name: item.dataset.name, path: item.dataset.path, icon: item.dataset.icon, catalog: item.dataset.catalog });
+                        }
+                    });
+                });
+            });
         }
 
-        function getBrowserInfo() {
-            const ua = navigator.userAgent;
-            if (ua.includes('Chrome')) return 'Chrome';
-            if (ua.includes('Firefox')) return 'Firefox';
-            if (ua.includes('Safari')) return 'Safari';
-            if (ua.includes('Edge')) return 'Edge';
-            return 'Unknown';
-        }
-
-        // === SEARCH FUNCTIONALITY ===
+        // ===== SEARCH =====
+        let searchTimeout;
         function setupSearch() {
-            let searchTimeout;
-            
-            elements.searchInput.addEventListener('input', (e) => {
+            els.searchInput.addEventListener('input', () => {
                 clearTimeout(searchTimeout);
-                
                 searchTimeout = setTimeout(() => {
-                    appState.searchQuery = e.target.value.trim();
-                    renderCategories();
+                    appState.searchQuery = els.searchInput.value.trim();
+                    if (appState.currentPage === 'dashboard') renderCategories();
                 }, 300);
             });
-            
-            // Clear search with Escape key
-            elements.searchInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    elements.searchInput.value = '';
-                    appState.searchQuery = '';
-                    renderCategories();
-                }
+            els.searchInput.addEventListener('keydown', e => {
+                if (e.key === 'Escape') { els.searchInput.value = ''; appState.searchQuery = ''; if (appState.currentPage==='dashboard') renderCategories(); els.searchInput.blur(); }
             });
+            document.addEventListener('keydown', e => {
+                if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); els.searchInput.focus(); navigateTo('dashboard'); }
+                if (e.key==='/' && document.activeElement===document.body) { e.preventDefault(); els.searchInput.focus(); }
+            });
+            els.searchHint.textContent = navigator.platform.toUpperCase().includes('MAC') ? '⌘K' : 'Ctrl+K';
         }
 
-        // === UI STATES ===
-        function showLoading() {
-            elements.loading.style.display = 'block';
-            appState.isLoading = true;
+        // ===== UI =====
+        function showLoading() { els.loading.style.display = 'block'; }
+        function hideLoading() { els.loading.style.display = 'none'; }
+        function showError(msg) {
+            els.categoriesGrid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><iconify-icon class="empty-icon" icon="mdi:alert-circle"></iconify-icon><div class="empty-title">Oops!</div><p>${sanitize(msg)}</p><button id="retryBtn" style="margin-top:16px;padding:8px 20px;background:var(--primary);color:white;border:none;border-radius:var(--radius-full);cursor:pointer;font-weight:600;font-family:inherit;">Try Again</button></div>`;
+            $('#retryBtn')?.addEventListener('click', () => loadData(true));
         }
 
-        function hideLoading() {
-            elements.loading.style.display = 'none';
-            appState.isLoading = false;
-        }
-
-        function showEmptyState(message) {
-            elements.categoriesGrid.innerHTML = `
-                <div class="empty-state">
-                    <iconify-icon class="empty-icon" icon="mdi:magnify-close"></iconify-icon>
-                    <div class="empty-title">${message}</div>
-                    <p>Try a different search term</p>
-                </div>
-            `;
-        }
-
-        function showError(message) {
-            elements.categoriesGrid.innerHTML = `
-                <div class="empty-state">
-                    <iconify-icon class="empty-icon" icon="mdi:alert-circle"></iconify-icon>
-                    <div class="empty-title">Oops! Something went wrong</div>
-                    <p>${message}</p>
-                    <button onclick="init()" style="
-                        margin-top: 20px;
-                        padding: 10px 24px;
-                        background: var(--primary);
-                        color: white;
-                        border: none;
-                        border-radius: var(--radius-md);
-                        cursor: pointer;
-                        font-weight: 600;
-                        transition: var(--transition);
-                    " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                        Try Again
-                    </button>
-                </div>
-            `;
-            hideLoading();
-        }
-
-        // === INITIALIZATION ===
+        // ===== INIT =====
         function init() {
-            setupTabs();
+            setupSidebar();
             setupTheme();
             setupSearch();
+            setupGreeting();
+            setupViewToggle();
+            els.clearHistory.addEventListener('click', clearRecent);
             loadData();
-            
-            // Smooth page appearance
-            setTimeout(() => {
-                elements.body.style.opacity = '0';
-                elements.body.style.transition = 'opacity 0.3s ease';
-                requestAnimationFrame(() => {
-                    elements.body.style.opacity = '1';
-                });
-            }, 100);
         }
 
-        // Make functions available globally for error recovery
         window.init = init;
         window.loadData = loadData;
-
-        // Start the app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
